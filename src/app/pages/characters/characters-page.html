@@ -1,1 +1,31 @@
-<h2>Personajes</h2>
+<h2 class="mb-3">Personajes</h2>
+
+@if (loading()) {
+  <p class="text-center">Cargando personajes...</p>
+} @else if (error()) {
+  <div class="alert alert-warning">{{ error() }}</div>
+} @else {
+  <p class="text-body-secondary">{{ totalCharacters() }} personajes encontrados</p>
+
+  <div class="characters-grid">
+    @for (character of characters(); track character.id) {
+      <div class="character-card">
+        <img [src]="character.image" [alt]="character.name" />
+        <h5>{{ character.name }}</h5>
+        <p class="mb-2">{{ character.species }}</p>
+
+        @switch (character.status) {
+          @case ('Alive') {
+            <span class="badge text-bg-success">Vivo</span>
+          }
+          @case ('Dead') {
+            <span class="badge text-bg-danger">Muerto</span>
+          }
+          @default {
+            <span class="badge text-bg-secondary">Desconocido</span>
+          }
+        }
+      </div>
+    }
+  </div>
+}
