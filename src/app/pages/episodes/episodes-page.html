@@ -1,1 +1,59 @@
-<h2>Episodios</h2>
+<h2 class="mb-3">Episodios</h2>
+
+<div class="mb-3">
+  @for (s of seasons; track s) {
+    <button class="btn me-2 mb-2"
+      [class.btn-primary]="s === season()"
+      [class.btn-outline-primary]="s !== season()"
+      (click)="selectSeason(s)">
+      Temporada {{ s }}
+    </button>
+  }
+</div>
+
+@if (loading()) {
+  <p>Cargando episodios...</p>
+} @else if (error()) {
+  <div class="alert alert-danger">
+    No se pudieron cargar los episodios.
+    <button class="btn btn-sm btn-outline-danger ms-2" (click)="selectSeason(season())">Reintentar</button>
+  </div>
+} @else {
+  <div class="row">
+    <div class="col-12 col-md-5">
+      <div class="list-group mb-4">
+        @for (episode of episodes(); track episode.id) {
+          <button type="button" class="list-group-item list-group-item-action"
+            [class.active]="episode.id === selectedEpisode()?.id"
+            (click)="selectEpisode(episode)">
+            <strong>{{ episode.episode }}</strong> - {{ episode.name }}
+            <br />
+            <small>Emitido el {{ episode.air_date | date: 'dd/MM/yyyy' }}</small>
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="col-12 col-md-7">
+      @if (selectedEpisode(); as episode) {
+        <h4>{{ episode.name }}</h4>
+        <p class="text-body-secondary">{{ episode.episode }} · {{ episode.characters.length }} personajes</p>
+
+        @if (loadingCharacters()) {
+          <p>Cargando personajes...</p>
+        } @else {
+          <div class="episode-characters">
+            @for (character of episodeCharacters(); track character.id) {
+              <div class="small-card">
+                <img [src]="character.image" [alt]="character.name" />
+                <span>{{ character.name }}</span>
+              </div>
+            }
+          </div>
+        }
+      } @else {
+        <p class="text-body-secondary">Elegí un episodio para ver sus personajes.</p>
+      }
+    </div>
+  </div>
+}

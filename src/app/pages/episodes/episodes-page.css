@@ -1,0 +1,20 @@
+.episode-characters {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 12px;
+}
+
+.small-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.small-card img {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
