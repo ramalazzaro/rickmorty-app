@@ -13,6 +13,11 @@
       </li>
     </ul>
 
-    <button class="btn btn-success btn-sm">Login</button>
+    @if (userService.user(); as user) {
+      <span class="navbar-text me-3">Hola, {{ user.email }}</span>
+      <button class="btn btn-outline-light btn-sm" (click)="userService.logout()">Salir</button>
+    } @else {
+      <a class="btn btn-success btn-sm" routerLink="/login">Login</a>
+    }
   </div>
 </nav>
