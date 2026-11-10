@@ -25,6 +25,8 @@ export class CharactersPage {
   name = signal('');
   status = signal('');
 
+  randomCharacter = signal<Character | null>(null);
+
   constructor() {
     this.loadCharacters();
   }
@@ -75,5 +77,14 @@ export class CharactersPage {
   nextPage() {
     this.page.update(p => p + 1);
     this.loadCharacters();
+  }
+
+  loadRandomCharacter() {
+    // la API tiene 826 personajes, con ids del 1 al 826
+    const id = Math.floor(Math.random() * 826) + 1;
+    this.rickMorty.getCharacter(id).subscribe({
+      next: (character) => this.randomCharacter.set(character),
+      error: () => this.randomCharacter.set(null),
+    });
   }
 }

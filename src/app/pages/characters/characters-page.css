@@ -27,3 +27,8 @@
 .character-card h5 {
   font-size: 1.05rem;
 }
+
+.random-card {
+  border: 2px solid #198754;
+  overflow: hidden;
+}

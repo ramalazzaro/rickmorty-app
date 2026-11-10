@@ -16,7 +16,28 @@
       <option value="unknown">Desconocido</option>
     </select>
   </div>
+  <div class="col-12 col-md-3 text-md-end">
+    <button class="btn btn-success" (click)="loadRandomCharacter()">Personaje al azar</button>
+  </div>
 </div>
+
+@if (randomCharacter(); as character) {
+  <div class="card random-card mb-4">
+    <div class="row g-0">
+      <div class="col-4 col-md-2">
+        <img [src]="character.image" [alt]="character.name" class="img-fluid rounded-start" />
+      </div>
+      <div class="col-8 col-md-10">
+        <div class="card-body">
+          <h5 class="card-title">#{{ character.id }} {{ character.name }}</h5>
+          <p class="card-text mb-1">Especie: {{ character.species }}</p>
+          <p class="card-text">Última ubicación: {{ character.location.name }}</p>
+          <button class="btn btn-sm btn-outline-secondary" (click)="randomCharacter.set(null)">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
 
 @if (loading()) {
   <p class="text-center">Cargando personajes...</p>

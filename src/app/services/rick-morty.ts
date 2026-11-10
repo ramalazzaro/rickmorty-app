@@ -1,5 +1,6 @@
 import { Service, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Character } from '../interfaces/character';
 
 @Service()
 export class RickMortyService {
@@ -11,5 +12,10 @@ export class RickMortyService {
     return this.http.get<any>(`${this.apiUrl}/character/`, {
       params: { page, name, status },
     });
+  }
+
+  // GET 2: un personaje por su id
+  getCharacter(id: number) {
+    return this.http.get<Character>(`${this.apiUrl}/character/${id}`);
   }
 }
