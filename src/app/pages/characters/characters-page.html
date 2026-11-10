@@ -1,9 +1,32 @@
 <h2 class="mb-3">Personajes</h2>
 
+<div class="row g-2 mb-3">
+  <div class="col-12 col-md-6">
+    <input type="text" class="form-control" placeholder="Buscar por nombre (Enter para buscar)"
+      [value]="name()"
+      (keyup.enter)="search(txtName.value)"
+      #txtName
+    />
+  </div>
+  <div class="col-12 col-md-3">
+    <select class="form-select" (change)="changeStatus(selStatus.value)" #selStatus>
+      <option value="">Todos los estados</option>
+      <option value="alive">Vivo</option>
+      <option value="dead">Muerto</option>
+      <option value="unknown">Desconocido</option>
+    </select>
+  </div>
+</div>
+
 @if (loading()) {
   <p class="text-center">Cargando personajes...</p>
+} @else if (notFound()) {
+  <div class="alert alert-info">No se encontraron personajes con ese filtro.</div>
 } @else if (error()) {
-  <div class="alert alert-warning">{{ error() }}</div>
+  <div class="alert alert-danger">
+    No se pudo conectar con la API.
+    <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadCharacters()">Reintentar</button>
+  </div>
 } @else {
   <p class="text-body-secondary">{{ totalCharacters() }} personajes encontrados</p>
 
@@ -27,5 +50,15 @@
         }
       </div>
     }
+  </div>
+
+  <div class="d-flex justify-content-center align-items-center gap-3 my-4">
+    <button class="btn btn-outline-primary" [disabled]="page() === 1" (click)="previousPage()">
+      Anterior
+    </button>
+    <span>Página {{ page() }} de {{ totalPages() }}</span>
+    <button class="btn btn-outline-primary" [disabled]="page() === totalPages()" (click)="nextPage()">
+      Siguiente
+    </button>
   </div>
 }

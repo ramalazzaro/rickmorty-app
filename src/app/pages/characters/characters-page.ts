@@ -14,7 +14,16 @@ export class CharactersPage {
   characters = signal<Character[]>([]);
   totalCharacters = signal(0);
   loading = signal(false);
-  error = signal('');
+  notFound = signal(false);
+  error = signal(false);
+
+  // paginación
+  page = signal(1);
+  totalPages = signal(0);
+
+  // filtros
+  name = signal('');
+  status = signal('');
 
   constructor() {
     this.loadCharacters();
@@ -22,19 +31,49 @@ export class CharactersPage {
 
   loadCharacters() {
     this.loading.set(true);
-    this.error.set('');
+    this.notFound.set(false);
+    this.error.set(false);
 
-    this.rickMorty.getCharacters(1, '', '').subscribe({
+    this.rickMorty.getCharacters(this.page(), this.name(), this.status()).subscribe({
       next: (response) => {
         this.characters.set(response.results);
         this.totalCharacters.set(response.info.count);
+        this.totalPages.set(response.info.pages);
         this.loading.set(false);
       },
-      error: () => {
+      error: (err) => {
         this.characters.set([]);
-        this.error.set('No se pudo conectar con la API');
+        this.totalPages.set(0);
+        // la API responde 404 cuando el filtro no encuentra nada
+        if (err.status === 404) {
+          this.notFound.set(true);
+        } else {
+          this.error.set(true);
+        }
         this.loading.set(false);
       },
     });
+  }
+
+  search(text: string) {
+    this.name.set(text.trim());
+    this.page.set(1);
+    this.loadCharacters();
+  }
+
+  changeStatus(value: string) {
+    this.status.set(value);
+    this.page.set(1);
+    this.loadCharacters();
+  }
+
+  previousPage() {
+    this.page.update(p => p - 1);
+    this.loadCharacters();
+  }
+
+  nextPage() {
+    this.page.update(p => p + 1);
+    this.loadCharacters();
   }
 }
